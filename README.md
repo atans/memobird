@@ -110,6 +110,7 @@ $printStatusResult = $memobird->printStatus($printPaperResult->getPrintcontentid
 **Requirements 要求**
 
 php 5.5
+
 GD
 
 **Official Documentation 官方文档**
