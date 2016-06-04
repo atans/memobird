@@ -8,9 +8,13 @@ A PHP Memobird library
 **Feature 只要功能**
 
 1.Add text 增加文字
+
 2.Add text image width options 增加文字的图片 (可设定左对齐，居中， 右对齐)
+
 3.Add Line 增加分隔线
+
 4.Add Qr Code 增加二维码
+
 5.Add Photo 增加图片
 
 
