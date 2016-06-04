@@ -1,6 +1,6 @@
 {
     "name": "atans/memobird",
-    "description": "A Unofficial memobird library",
+    "description": "A PHP Memobird library",
     "keywords": ["memobird"],
     "homepage": "http://github.com/atans/memobird",
     "type": "library",
