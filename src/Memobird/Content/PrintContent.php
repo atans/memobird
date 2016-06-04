@@ -163,7 +163,11 @@ class PrintContent extends AbstractPrintContent
             $y            = $paddingTop;
 
             foreach ($lines as $index => $line) {
-                $width = $font->box($line)->getWidth();
+                try {
+                    $width = $font->box($line)->getWidth();
+                } catch (\Imagine\Exception\InvalidArgumentException $e) {
+                    $width = $textBox->getWidth();
+                }
 
                 switch ($options['align']) {
                     case self::ALIGN_RIGHT:
@@ -212,10 +216,10 @@ class PrintContent extends AbstractPrintContent
         $width  = 0;
         $offset = 0;
         foreach ($words as $word) {
-            if (preg_match('/[\s\t　]/', $word)) {
-                $wordWidth = $fontBox->getWidth();
-            } else {
+            try {
                 $wordWidth = $font->box($word)->getWidth();
+            } catch (\Imagine\Exception\InvalidArgumentException $e) {
+                $wordWidth = $fontBox->getWidth();
             }
 
             if (($width + $wordWidth) > $maxWidth) {
