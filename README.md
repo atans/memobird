@@ -75,6 +75,14 @@ $printContent->addQrCode('http://memobird.cn', [
 // Remove all content
 // 刪除所有內容
 $printContent->removeAll();
+
+// Print
+// 打印
+$printPaperResult = $memobird->printPaper($memobirdId, $printContent);
+
+// print status
+// 打印状态
+$printStatusResult = $memobird->printStatus($printPaperResult->getPrintcontentid());
     
 ```
 
@@ -82,10 +90,12 @@ $printContent->removeAll();
 ***
 
 **Requirements 要求**
+
 php 5.5
 GD
 
 **Official Documentation 官方文档**
+
 http://open.memobird.cn/ (Chinese)
 
 **Thanks 感谢**
