@@ -1,7 +1,18 @@
 **MEMOBIRD PHP LIBRARY**
 
-An Unofficial memobird library
-一个非官方咕咕机库
+A PHP Memobird library
+
+咕咕机PHP库
+
+
+**Feature 只要功能**
+
+1.Add text 增加文字
+2.Add text image width options 增加文字的图片 (可设定左对齐，居中， 右对齐)
+3.Add Line 增加分隔线
+4.Add Qr Code 增加二维码
+5.Add Photo 增加图片
+
 
 **Installation 安装**
 
@@ -57,7 +68,7 @@ $printContent->addText('Hello World')
 // Add a text image
 // 增加文字图
 $printContent->addTextImage('Hello world');
-or
+// or
 $printContent->addTextImage('Hello world', [
     'align' => self::ALIGN_CENTER,
     'font' => 'path/to/font.ttf',
@@ -70,7 +81,7 @@ $printContent->addTextImage('Hello world', [
 $printContent->addLine();
 
 // Add a Qr Code
-// 增加 Qr code
+// 增加 二维码
 $printContent->addQrCode('http://memobird.cn');
 $printContent->addQrCode('http://memobird.cn', [
     'logo' => 'path/to/logo.jpg',
@@ -81,14 +92,14 @@ $printContent->addQrCode('http://memobird.cn', [
     
 // Remove all content
 // 刪除所有內容
-$printContent->removeAll();
+// $printContent->removeAll();
 
 // Print
 // 打印
 $printPaperResult = $memobird->printPaper($memobirdId, $printContent);
 
-// print status
-// 打印状态
+// Get print status
+// 取得打印状态
 $printStatusResult = $memobird->printStatus($printPaperResult->getPrintcontentid());
     
 ```
