@@ -1,0 +1,37 @@
+{
+    "name": "atans/memobird",
+    "description": "A Unofficial memobird library",
+    "keywords": ["memobird"],
+    "homepage": "http://github.com/atans/memobird",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Atans Chiu",
+            "email": "atans.chiu@gmail.com",
+            "homepage": "http://github.com/atans"
+        }
+    ],
+    "require": {
+        "php": "^5.5",
+        "ext-gd": "*",
+        "imagine/imagine": "0.6.*",
+        "guzzlehttp/guzzle": "~6.0",
+        "symfony/serializer":">=2.8",
+        "symfony/property-access": ">=2.8",
+        "doctrine/cache":"*",
+        "endroid/qrcode":"1.7.*"
+    },
+    "require-dev": {
+        "monolog/monolog":"~1.0",
+        "phpunit/phpunit":"*"
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": {"Atans\\": "src/"}
+    },
+    "autoload-dev": {
+        "psr-4": {"MemobirdTest\\": "tests/MemobirdTest"}
+    }
+}

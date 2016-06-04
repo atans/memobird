@@ -1,0 +1,6 @@
+<?php
+
+return array(
+    'ak'          => '', // Input memobird ak here
+    'memobird_id' => '', // memobird driver id
+);

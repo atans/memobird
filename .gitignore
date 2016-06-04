@@ -1,0 +1,7 @@
+.idea
+composer.lock
+vendor
+composer.phar
+memobird.log
+phpunit.xml
+test*.php
