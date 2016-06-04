@@ -101,10 +101,17 @@ http://open.memobird.cn/ (Chinese)
 **Thanks 感谢**
 
 GDIndexedColorConverter https://github.com/ccpalettes/gd-indexed-color-converter
+
 Guzzle http://docs.guzzlephp.org
+
 Imagine http://imagine.readthedocs.org/
+
 Monolog https://github.com/Seldaek/monolog
+
 Symfony Serializer http://symfony.com/doc/current/components/serializer.html
+
 QrCode https://github.com/endroid/QrCode
+
 Doctrine Cache http://doctrine-orm.readthedocs.io/projects/doctrine-orm/en/latest/reference/caching.html
+
 symfony/property-access http://symfony.com/doc/current/components/property_access/index.html
