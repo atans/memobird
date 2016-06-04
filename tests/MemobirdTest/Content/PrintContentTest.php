@@ -1,5 +1,5 @@
 <?php
-namespace Atans\Memobird\Tests;
+namespace MemobirdTest\Content;
 
 use Atans\Memobird\Content\PrintContent;
 
@@ -18,13 +18,13 @@ class PrintContentTest extends \PHPUnit_Framework_TestCase
         $text1 = 'Hello World';
         $printContent->addText($text1);
 
-        $expected1 = 'T:' . $this->convertToGbk($text1);
+        $expected1 = 'T:' . $this->convertToGbk($text1 . "\n");
         $this->assertEquals($expected1, $printContent->getPrintContent());
 
         $text2 = 'Another text';
         $printContent->addText($text2);
 
-        $expected2 = $expected1 . '|T:' . $this->convertToGbk($text2);
+        $expected2 = $expected1 . '|T:' . $this->convertToGbk($text2 . "\n");
         $this->assertEquals($expected2, $printContent->getPrintContent());
 
     }
