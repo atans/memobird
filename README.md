@@ -22,6 +22,8 @@ require 'vendor/autolod.php';
 
 $memobird = new \Atans\Memobird('API KEY');
 
+$memobirdId = 'Your memobird device id';
+
 $printContent = new \Atans\Content\PrintContent();
 
 // Add a text
