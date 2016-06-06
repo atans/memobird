@@ -85,6 +85,7 @@ $printContent->addTextImage('Hello world', [
 
 
 // Add a line
+// 加一条线
 $printContent->addLine();
 
 // Add a Qr Code
