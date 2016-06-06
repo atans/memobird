@@ -35,11 +35,14 @@ $ composer require atans/memobird
 <?php
 require 'vendor/autolod.php';
 
-$memobird = new \Atans\Memobird('API KEY');
+use Atans\Content\PrintContent;
+use Atans\Memobird\Memobird;
+
+$memobird = new Memobird('API KEY');
 
 $memobirdId = 'Your memobird device id';
 
-$printContent = new \Atans\Content\PrintContent();
+$printContent = new PrintContent();
 
 // Add a text
 // 增加一段文字
@@ -74,7 +77,7 @@ $printContent->addText('Hello World')
 $printContent->addTextImage('Hello world');
 // or
 $printContent->addTextImage('Hello world', [
-    'align' => self::ALIGN_CENTER,
+    'align' => PrintContent::ALIGN_CENTER,
     'font' => 'path/to/font.ttf',
      // ... more option please see src/Memobird/Content/PrintContent.php
      // ... 更多设置请看 src/Memobird/Content/PrintContent.php
