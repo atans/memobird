@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "php": "^5.5",
+        "php": ">=5.5",
         "ext-gd": "*",
         "imagine/imagine": "0.6.*",
         "guzzlehttp/guzzle": "~6.0",
