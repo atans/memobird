@@ -135,8 +135,8 @@ class MemobirdTest extends \PHPUnit_Framework_TestCase
     public function testPrintTextImage()
     {
         $printContent = new PrintContent();
-        $printContent->addTextImage('Hello World', array('size' => 20))
-            ->addTextImage('你好，世界', array('size' => 20));
+        $printContent->addTextImage('Hello World', array('size' => 32))
+            ->addTextImage('你好，世界', array('size' => 32));
 
         $printPaperResult = $this->memobird->printPaper($this->config['memobird_id'], $printContent);
 
@@ -165,8 +165,8 @@ class MemobirdTest extends \PHPUnit_Framework_TestCase
     public function testTextImageAutoWrap()
     {
         $printContent = new PrintContent();
-        $printContent->addText('京东配送员【颜昌友】已出发，联系电话【15919679718，感谢您的耐心等待，参加评价还能赢取京豆呦')
-            ->addText('在观看夏季联赛期间，奇才当家控卫约翰-沃尔应邀来到解说席。不仅解说了比赛，还讨论了今年休赛期的热门话题。当被问到如何看待杜兰特转会一事，沃尔显得非常理解：“呃，首先我想说的是，现...');
+        $printContent->addTextImage('京东配送员【颜昌友】已出发，联系电话【15919679718，感谢您的耐心等待，参加评价还能赢取京豆呦')
+            ->addTextImage('在观看夏季联赛期间，奇才当家控卫约翰-沃尔应邀来到解说席。不仅解说了比赛，还讨论了今年休赛期的热门话题。当被问到如何看待杜兰特转会一事，沃尔显得非常理解：“呃，首先我想说的是，现...');
 
         $printPaperResult = $this->memobird->printPaper($this->config['memobird_id'], $printContent);
 

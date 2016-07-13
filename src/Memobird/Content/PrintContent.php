@@ -112,8 +112,8 @@ class PrintContent extends AbstractPrintContent
     public function textToImage($text, array $options = array())
     {
         $options = array_merge([
-            'align'          => self::ALIGN_CENTER,
-            'size'           => 24,
+            'align'          => self::ALIGN_LEFT,
+            'size'           => 20,
             'font'           => null,
             'vertical'       => false,
             'padding_top'    => null,
@@ -131,7 +131,7 @@ class PrintContent extends AbstractPrintContent
         $fontFile = $options['font'] ? $options['font'] : $this->getFont();
         $font     = new Font($fontFile, $options['size'], $black);
 
-        $textBox       = $font->box('A');
+        $textBox       = $font->box('我');
         $textWidth     = $textBox->getWidth();
         $textHeight    = $textBox->getHeight();
         $paddingTop    = $options['padding_top'] ? $options['padding_top'] : $textHeight / 2;
@@ -174,7 +174,7 @@ class PrintContent extends AbstractPrintContent
                         $x = $maxWidth - $width - $paddingLeft;
                         break;
                     case self::ALIGN_CENTER:
-                        $x = ($maxWidth - $width) / 2 + $paddingLeft;
+                        $x = (self::IMAGE_MAX_WIDTH - $width) / 2;
                         break;
                     default:
                         $x = $paddingLeft;
@@ -206,8 +206,8 @@ class PrintContent extends AbstractPrintContent
      */
     public function stringToMultipleLines($string, Font $font, $maxWidth)
     {
-        $fontBox  = $font->box('A');
-        $maxWidth = $maxWidth - ($fontBox->getWidth() * 2);
+        $fontBox  = $font->box('我');
+        $maxWidth = $maxWidth - $fontBox->getWidth();
 
         preg_match_all('/./u', $string, $words);
         $words = $words[0];
@@ -216,10 +216,15 @@ class PrintContent extends AbstractPrintContent
         $width  = 0;
         $offset = 0;
         foreach ($words as $word) {
-            try {
-                $wordWidth = $font->box($word)->getWidth();
-            } catch (\Imagine\Exception\InvalidArgumentException $e) {
+
+            if ($this->isSbcCaseCharacter($word)) {
                 $wordWidth = $fontBox->getWidth();
+            } else {
+                try {
+                    $wordWidth = $font->box($word)->getWidth();
+                } catch (\Imagine\Exception\InvalidArgumentException $e) {
+                    $wordWidth = $fontBox->getWidth();
+                }
             }
 
             if (($width + $wordWidth) > $maxWidth) {
@@ -237,6 +242,32 @@ class PrintContent extends AbstractPrintContent
         }
 
         return $lines;
+    }
+
+    function isSbcCaseCharacter($str)
+    {
+        $data =  [
+            '０' , '１' , '２' , '３' , '４' ,
+            '５' , '６' , '７' , '８' , '９' ,
+            'Ａ' , 'Ｂ' , 'Ｃ' , 'Ｄ' , 'Ｅ' ,
+            'Ｆ' , 'Ｇ' , 'Ｈ' , 'Ｉ' , 'Ｊ' ,
+            'Ｋ' , 'Ｌ' , 'Ｍ' , 'Ｎ' , 'Ｏ' ,
+            'Ｐ' , 'Ｑ' , 'Ｒ' , 'Ｓ' , 'Ｔ' ,
+            'Ｕ' , 'Ｖ' , 'Ｗ' , 'Ｘ' , 'Ｙ' ,
+            'Ｚ' , 'ａ' , 'ｂ' , 'ｃ' , 'ｄ' ,
+            'ｅ' , 'ｆ' , 'ｇ' , 'ｈ' , 'ｉ' ,
+            'ｊ' , 'ｋ' , 'ｌ' , 'ｍ' , 'ｎ' ,
+            'ｏ' , 'ｐ' , 'ｑ' , 'ｒ' , 'ｓ' ,
+            'ｔ' , 'ｕ' , 'ｖ' , 'ｗ' , 'ｘ' ,
+            'ｙ' , 'ｚ' , '－' , '　' , '：' ,
+            '．' , '，' , '／' , '％' , '＃' ,
+            '！' , '＠' , '＆' , '（' , '）' ,
+            '＜' , '＞' , '＂' , '＇' , '？' ,
+            '［' , '］' , '｛' , '｝' , '＼' ,
+            '｜' , '＋' , '＝' , '＿' , '＾' ,
+            '￥' , '￣' , '｀'];
+
+        return in_array($str, $data);
     }
 
     /**

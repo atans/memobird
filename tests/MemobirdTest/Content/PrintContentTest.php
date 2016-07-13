@@ -29,6 +29,13 @@ class PrintContentTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testTextImageAutoWrap()
+    {
+        $printContent = new PrintContent();
+        $printContent->textToImage('在观看夏季联赛期间，奇才当家控卫约翰-沃尔应邀来到解说席。不仅解说了比赛，还讨论了今年休赛期的热门话题。当被问到如何看待杜兰特转会一事，沃尔显得非常理解：“呃，首先我想说的是，现...')
+            ->save(__DIR__ . '/../images/text-image-auto-wrap.jpg');
+    }
+
     public function testTextImage()
     {
         $printContent = new PrintContent();
@@ -36,16 +43,18 @@ class PrintContentTest extends \PHPUnit_Framework_TestCase
         $printContent->textToImage(str_repeat('你好,', 4), array(
             'align' => 'center',
             'size' => 20,
-        ))->save(__DIR__ . '/../images/centered-text.jpg');
+        ))->save(__DIR__ . '/../images/text-image-centered-text.jpg');
 
         $printContent->textToImage(str_repeat('你好,', 4), array(
             'align' => 'center',
             'size' => 20,
             'vertical' => true,
-        ))->save(__DIR__ . '/../images/vertical-text.jpg');
+        ))->save(__DIR__ . '/../images/text-image-vertical-text.jpg');
     }
 
-    /**
+
+
+        /**
      * @expectedException \Atans\Memobird\Exception\InvalidArgumentException
      */
     public function testException()
