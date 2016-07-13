@@ -13,9 +13,11 @@ A PHP Memobird library
 
 3.Add Line 增加分隔线
 
-4.Add Qr Code 增加二维码
+4.Add QR Code 增加二维码
 
 5.Add Photo 增加图片
+
+6.Add printed time 增加列印时间
 
 
 **Installation 安装**
@@ -43,6 +45,10 @@ $memobird = new Memobird('API KEY');
 $memobirdId = 'Your memobird device id';
 
 $printContent = new PrintContent();
+
+// Set font
+// 设置字体
+$printContent->setFont('path/to/font.ttf');
 
 // Add a text
 // 增加一段文字
@@ -96,7 +102,11 @@ $printContent->addQrCode('http://memobird.cn', [
     // ... more option please see src/Memobird/Content/PrintContent.php
     // ... 更多设置请看 src/Memobird/Content/PrintContent.php
 ]);
-    
+
+// Add printed time
+// 加列印时间
+$printContent->addPrint('http://memobird.cn');
+
     
 // Remove all content
 // 刪除所有內容
@@ -113,7 +123,6 @@ $printStatusResult = $memobird->printStatus($printPaperResult->getPrintcontentid
 ```
 
 
-***
 
 **Requirements 要求**
 

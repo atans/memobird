@@ -5,8 +5,6 @@ namespace Atans\Memobird\Content;
 use Atans\Memobird\Utils\GDIndexedColorConverter;
 use Imagine\Gd\Imagine;
 use Atans\Memobird\Exception;
-use Imagine\Image\Box;
-use Imagine\Image\Palette\RGB;
 use Imagine\Image\Point;
 
 abstract class AbstractPrintContent implements PrintContentInterface
@@ -184,7 +182,7 @@ abstract class AbstractPrintContent implements PrintContentInterface
     public function getFont()
     {
         if (! $this->font) {
-            $this->setFont(__DIR__ . '/../resources/font/SourceHanSans-Medium.otf');
+            $this->setFont(__DIR__ . '/../resources/font/msyh.ttf');
         }
         return $this->font;
     }

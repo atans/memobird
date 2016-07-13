@@ -25,16 +25,16 @@ class PrintContent extends AbstractPrintContent
     public function addLine(array $options = [])
     {
         $options = array_merge([
-            'thickness' => 3,
-            'padding_top' => 10,
+            'thickness'      => 3,
+            'padding_top'    => 10,
             'padding_bottom' => 10,
-            'padding_left' => 0,
-            'padding_right' => 0,
+            'padding_left'   => 0,
+            'padding_right'  => 0,
         ], $options);
 
-        $imagine = new Imagine();
+        $imagine      = new Imagine();
         $canvasHeight = $options['padding_top'] + $options['thickness'] + $options['padding_bottom'];
-        $canvas = $imagine->create(new Box(self::IMAGE_MAX_WIDTH, $canvasHeight));
+        $canvas       = $imagine->create(new Box(self::IMAGE_MAX_WIDTH, $canvasHeight));
 
         $palette = new RGB();
 
@@ -61,9 +61,9 @@ class PrintContent extends AbstractPrintContent
     public function addQrCode($text, array $options = [])
     {
         $options = array_merge([
-            'size' => null,
-            'padding' => null,
-            'logo' => null,
+            'size'      => null,
+            'padding'   => null,
+            'logo'      => null,
             'logo_size' => null,
         ], $options);
 
@@ -88,7 +88,6 @@ class PrintContent extends AbstractPrintContent
         }
 
         return $this->addPhoto($qrCode->get('jpg'));
-
     }
 
     /**
@@ -105,6 +104,7 @@ class PrintContent extends AbstractPrintContent
 
     /**
      * Text to image
+     *
      * @param string $text
      * @param array $options
      * @return \Imagine\Gd\Image|\Imagine\Image\ImageInterface
@@ -113,7 +113,7 @@ class PrintContent extends AbstractPrintContent
     {
         $options = array_merge([
             'align'          => self::ALIGN_CENTER,
-            'size'           => 20,
+            'size'           => 24,
             'font'           => null,
             'vertical'       => false,
             'padding_top'    => null,
@@ -143,15 +143,15 @@ class PrintContent extends AbstractPrintContent
             $textBox      = $font->box($text);
             $canvasWidth  = $textBox->getWidth() + $paddingLeft + $paddingRight;
             $canvasHeight = $textBox->getHeight() + $paddingTop + $paddingBottom;
-            $textCanvas       = $imagine->create(new Box($canvasWidth, $canvasHeight), $white);
+            $textCanvas   = $imagine->create(new Box($canvasWidth, $canvasHeight), $white);
             $textCanvas->draw()->text($text, $font, new Point($paddingLeft, $paddingTop));
             $textCanvas->rotate(90);
 
             $newHeight = $textCanvas->getSize()->getHeight();
-            $canvas = $imagine->create(new Box(self::IMAGE_MAX_WIDTH, $newHeight));
+            $canvas    = $imagine->create(new Box(self::IMAGE_MAX_WIDTH, $newHeight));
             $canvas->paste($textCanvas, new Point((self::IMAGE_MAX_WIDTH - $textCanvas->getSize()->getWidth()) / 2, 0));
         } else {
-            $maxWidth  = self::IMAGE_MAX_WIDTH - $paddingLeft - $paddingRight;
+            $maxWidth = self::IMAGE_MAX_WIDTH - $paddingLeft - $paddingRight;
 
             $lines     = $this->stringToMultipleLines($text, $font, $maxWidth);
             $lineCount = count($lines);
@@ -206,7 +206,7 @@ class PrintContent extends AbstractPrintContent
      */
     public function stringToMultipleLines($string, Font $font, $maxWidth)
     {
-        $fontBox = $font->box('A');
+        $fontBox  = $font->box('A');
         $maxWidth = $maxWidth - ($fontBox->getWidth() * 2);
 
         preg_match_all('/./u', $string, $words);
@@ -271,9 +271,25 @@ class PrintContent extends AbstractPrintContent
 
         $image = $imagine
             ->create(new Box($image->getSize()->getWidth(), $image->getSize()->getHeight()), $white)
-            ->paste($image, new Point(0,0));
+            ->paste($image, new Point(0, 0));
 
         return $this->addContent(self::TYPE_PHOTO, $image->get('jpg'));
+    }
+
+    /**
+     * Add print time
+     *
+     * @param string $prefix
+     * @param string $format
+     * @param array $options
+     * @return $this
+     */
+    public function addPrintedTime($prefix = 'Printed at: ', $format = 'Y-m-d H:i:s', $options =[])
+    {
+        $this->addTextImage(sprintf('%s%s', $prefix, date($format)), array_merge([
+            'size' => '12',
+        ], $options));
+        return $this;
     }
 
     /**

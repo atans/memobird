@@ -149,8 +149,8 @@ class Memobird
     {
         $key = $this->getCacheKey($memobirdId);
 
-        $userid = $this->getCache()->fetch($key);
-        if ($userid === false) {
+        $userId = $this->getCache()->fetch($key);
+        if ($userId === false) {
             $response = $this->userBind($memobirdId);
 
             if (! $response->success()) {
@@ -167,12 +167,12 @@ class Memobird
                 throw new Exception\UserIdNotFoundException($message);
             }
 
-            $userid = $response->getShowapiUserid();
+            $userId = $response->getShowapiUserid();
 
-            $this->getCache()->save($key, $userid);
+            $this->getCache()->save($key, $userId);
         }
 
-        return $userid;
+        return $userId;
     }
 
     /**

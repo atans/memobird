@@ -162,6 +162,33 @@ class MemobirdTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $printPaperResult->getPrintcontentid(), 'Printcontentid > 0');
     }
 
+    public function testTextImageAutoWrap()
+    {
+        $printContent = new PrintContent();
+        $printContent->addText('京东配送员【颜昌友】已出发，联系电话【15919679718，感谢您的耐心等待，参加评价还能赢取京豆呦')
+            ->addText('在观看夏季联赛期间，奇才当家控卫约翰-沃尔应邀来到解说席。不仅解说了比赛，还讨论了今年休赛期的热门话题。当被问到如何看待杜兰特转会一事，沃尔显得非常理解：“呃，首先我想说的是，现...');
+
+        $printPaperResult = $this->memobird->printPaper($this->config['memobird_id'], $printContent);
+
+        $this->assertTrue($printPaperResult->success());
+        $this->assertEquals(1, $printPaperResult->getShowapiResCode(), 'Res code = 1');
+        $this->assertGreaterThanOrEqual(1, $printPaperResult->getResult(), 'Result = 1 or 2');
+        $this->assertGreaterThan(0, $printPaperResult->getPrintcontentid(), 'Printcontentid > 0');
+    }
+
+    public function testPrintedTime()
+    {
+        $printContent = new PrintContent();
+        $printContent->addPrintedTime();
+
+        $printPaperResult = $this->memobird->printPaper($this->config['memobird_id'], $printContent);
+
+        $this->assertTrue($printPaperResult->success());
+        $this->assertEquals(1, $printPaperResult->getShowapiResCode(), 'Res code = 1');
+        $this->assertGreaterThanOrEqual(1, $printPaperResult->getResult(), 'Result = 1 or 2');
+        $this->assertGreaterThan(0, $printPaperResult->getPrintcontentid(), 'Printcontentid > 0');
+    }
+
     public function testAddTextImageAndLineAndQrCode()
     {
         $printContent = new PrintContent();
