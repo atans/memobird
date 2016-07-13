@@ -17,7 +17,7 @@ A PHP Memobird library
 
 5.Add Photo 增加图片
 
-6.Add printed time 增加列印时间
+6.Add printed time 增加列印时间 (v.1.0.3 13/7/2016)
 
 
 **Installation 安装**
