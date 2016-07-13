@@ -52,8 +52,6 @@ class PrintContentTest extends \PHPUnit_Framework_TestCase
         ))->save(__DIR__ . '/../images/text-image-vertical-text.jpg');
     }
 
-
-
         /**
      * @expectedException \Atans\Memobird\Exception\InvalidArgumentException
      */

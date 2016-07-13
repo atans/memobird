@@ -9,7 +9,7 @@ A PHP Memobird library
 
 1.Add text 增加文字
 
-2.Add text image width options 增加文字的图片 (可设定左对齐，居中， 右对齐)
+2.Add text image width options 增加文字的图片 (默认左对齐(1.0.4), 可设定左对齐，居中， 右对齐)
 
 3.Add Line 增加分隔线
 
