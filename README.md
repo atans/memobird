@@ -5,6 +5,7 @@ A PHP Memobird library
 咕咕机PHP库
 
 **Updates 更新**
+
 1.0.5 Fix image bug 修正第1张图片会显示下一张打印中
 
 
