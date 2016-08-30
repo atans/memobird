@@ -4,9 +4,18 @@ namespace Atans\Memobird\Content;
 
 interface PrintContentInterface
 {
-    const IMAGE_MAX_WIDTH = 384;
+    const CONTENT_MAX_WIDTH = 384;
 
-    const CONTENT_DELIMITER = '|';
+    /**
+     * P:{photo}
+     * T:{text}
+     */
+    const CONTENT_DELIMITER = ':';
+
+    /**
+     * {photo}|{text}|{photo}
+     */
+    const CONTENTS_DELIMITER = '|';
 
     const TYPE_TEXT  = 'T';
     const TYPE_PHOTO = 'P';

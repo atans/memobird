@@ -2,9 +2,11 @@
 
 namespace Atans\Memobird\Content;
 
+use Atans\Memobird\Exception;
 use Atans\Memobird\Utils\GDIndexedColorConverter;
 use Imagine\Gd\Imagine;
-use Atans\Memobird\Exception;
+use Imagine\Image\Box;
+use Imagine\Image\Palette\RGB;
 use Imagine\Image\Point;
 
 abstract class AbstractPrintContent implements PrintContentInterface
@@ -17,7 +19,7 @@ abstract class AbstractPrintContent implements PrintContentInterface
     /**
      * @var array
      */
-    protected $allowed_content_types = [
+    protected $allowedContentTypes = [
         self::TYPE_TEXT,
         self::TYPE_PHOTO
     ];
@@ -26,6 +28,63 @@ abstract class AbstractPrintContent implements PrintContentInterface
      * @var array
      */
     protected $contents = [];
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        // Fix image of previous page bug
+        $this->addText('');
+    }
+
+
+    /**
+     * Add text
+     *
+     * @param  string $text
+     * @return PrintContent
+     */
+    public function addText($text)
+    {
+        return $this->addContent(self::TYPE_TEXT, $text . "\n");
+    }
+
+    /**
+     * Add photo
+     *
+     * @param string $photo
+     * @return PrintContent
+     */
+    public function addPhoto($photo)
+    {
+        $imagine = new Imagine();
+        if (@is_file($photo)) {
+            $image = $imagine->open($photo);
+        } else {
+            $image = $imagine->load($photo);
+        }
+
+        // Fix transparent png
+        $palette = new RGB();
+        $white   = $palette->color('FFF');
+
+        $image = $imagine
+            ->create(new Box($image->getSize()->getWidth(), $image->getSize()->getHeight()), $white)
+            ->paste($image, new Point(0, 0));
+
+        return $this->addContent(self::TYPE_PHOTO, $image->get('jpg'));
+    }
+
+    /**
+     * Get print content
+     *
+     * @return string
+     */
+    public function getPrintContent()
+    {
+        return implode(self::CONTENTS_DELIMITER, $this->getContents());
+    }
 
     /**
      * Convert to gbk
@@ -56,18 +115,98 @@ abstract class AbstractPrintContent implements PrintContentInterface
                 $content = $this->imageToBmp($content);
                 break;
             default:
-                throw new Exception\INvalidArgumentException(sprintf('%s:%s', __METHOD__, 'Error type'));
+                throw new Exception\InvalidArgumentException(sprintf('%s:%s', __METHOD__, 'Error type'));
         }
 
         return sprintf('%s:%s', $type, base64_encode($content));
     }
 
     /**
-     * Get print content
+     * Add content
      *
-     * @return string
+     * @param string $type
+     * @param string $content
+     * @return $this
+     * @throws Exception\InvalidArgumentException
      */
-    abstract public function getPrintContent();
+    public function addContent($type, $content)
+    {
+        if (! in_array($type, $this->allowedContentTypes)) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                "%s: Invalid type '%s'",
+                __METHOD__,
+                $type
+            ));
+        }
+
+        $content = $this->encode($type, $content);
+
+        $this->contents[] = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get contents
+     *
+     * @return array
+     */
+    public function getContents()
+    {
+        return $this->contents;
+    }
+
+
+    /**
+     * Remove all contents
+     *
+     * @return $this
+     */
+    public function removeAll()
+    {
+        $this->contents = [];
+        return $this;
+    }
+
+    /**
+     * is image only
+     *
+     * @return bool
+     */
+    public function isPhotoOnly()
+    {
+        foreach ($this->getContents() as $content) {
+            if (! $this->isPhoto($content)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Is photo?
+     *
+     * @param string $content
+     * @return bool
+     */
+    public function isPhoto($content)
+    {
+        list($type, $content) = explode(self::CONTENT_DELIMITER, $content);
+        return self::TYPE_PHOTO == $type;
+    }
+
+    /**
+     * Is text?
+     *
+     * @param string $content
+     * @return bool
+     */
+    public function isText($content)
+    {
+        list($type, $content) = explode(self::CONTENT_DELIMITER, $content);
+        return self::TYPE_TEXT == $type;
+    }
 
     /**
      * 转换可打印格式
@@ -81,8 +220,8 @@ abstract class AbstractPrintContent implements PrintContentInterface
         $image = $imagine->load($content);
 
         // 宽 > 384
-        if ($image->getSize()->getHeight() > self::IMAGE_MAX_WIDTH) {
-            $image->resize($image->getSize()->widen(self::IMAGE_MAX_WIDTH));
+        if ($image->getSize()->getHeight() > self::CONTENT_MAX_WIDTH) {
+            $image->resize($image->getSize()->widen(self::CONTENT_MAX_WIDTH));
         }
 
         // 转180度

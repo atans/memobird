@@ -2,7 +2,6 @@
 
 namespace Atans\Memobird\Content;
 
-use Atans\Memobird\Exception;
 use Endroid\QrCode\QrCode;
 use Imagine\Gd\Font;
 use Imagine\Gd\Imagine;
@@ -34,13 +33,13 @@ class PrintContent extends AbstractPrintContent
 
         $imagine      = new Imagine();
         $canvasHeight = $options['padding_top'] + $options['thickness'] + $options['padding_bottom'];
-        $canvas       = $imagine->create(new Box(self::IMAGE_MAX_WIDTH, $canvasHeight));
+        $canvas       = $imagine->create(new Box(self::CONTENT_MAX_WIDTH, $canvasHeight));
 
         $palette = new RGB();
 
         $canvas->draw()->line(
             new Point($options['padding_left'], $options['padding_top']),
-            new Point(self::IMAGE_MAX_WIDTH - $options['padding_left'], $options['padding_top']),
+            new Point(self::CONTENT_MAX_WIDTH - $options['padding_left'], $options['padding_top']),
             $palette->color('000'),
             $options['thickness']
         );
@@ -148,10 +147,10 @@ class PrintContent extends AbstractPrintContent
             $textCanvas->rotate(90);
 
             $newHeight = $textCanvas->getSize()->getHeight();
-            $canvas    = $imagine->create(new Box(self::IMAGE_MAX_WIDTH, $newHeight));
-            $canvas->paste($textCanvas, new Point((self::IMAGE_MAX_WIDTH - $textCanvas->getSize()->getWidth()) / 2, 0));
+            $canvas    = $imagine->create(new Box(self::CONTENT_MAX_WIDTH, $newHeight));
+            $canvas->paste($textCanvas, new Point((self::CONTENT_MAX_WIDTH - $textCanvas->getSize()->getWidth()) / 2, 0));
         } else {
-            $maxWidth = self::IMAGE_MAX_WIDTH - $paddingLeft - $paddingRight;
+            $maxWidth = self::CONTENT_MAX_WIDTH - $paddingLeft - $paddingRight;
 
             $lines     = $this->stringToMultipleLines($text, $font, $maxWidth);
             $lineCount = count($lines);
@@ -159,7 +158,7 @@ class PrintContent extends AbstractPrintContent
             $lineHeight = $options['line_height'] ? $options['line_height'] : $textHeight / 2;
 
             $canvasHeight = $paddingTop + $paddingBottom + ($textHeight * $lineCount) + ($lineHeight * ($lineCount - 1));
-            $canvas       = $imagine->create(new Box(self::IMAGE_MAX_WIDTH, $canvasHeight));
+            $canvas       = $imagine->create(new Box(self::CONTENT_MAX_WIDTH, $canvasHeight));
             $y            = $paddingTop;
 
             foreach ($lines as $index => $line) {
@@ -174,7 +173,7 @@ class PrintContent extends AbstractPrintContent
                         $x = $maxWidth - $width - $paddingLeft;
                         break;
                     case self::ALIGN_CENTER:
-                        $x = (self::IMAGE_MAX_WIDTH - $width) / 2;
+                        $x = (self::CONTENT_MAX_WIDTH - $width) / 2;
                         break;
                     default:
                         $x = $paddingLeft;
@@ -266,110 +265,28 @@ class PrintContent extends AbstractPrintContent
     }
 
     /**
-     * Add text
-     *
-     * @param  string $text
-     * @return PrintContent
-     */
-    public function addText($text)
-    {
-        return $this->addContent(self::TYPE_TEXT, $text . "\n");
-    }
-
-    /**
-     * Add photo
-     *
-     * @param string $photo
-     * @return PrintContent
-     */
-    public function addPhoto($photo)
-    {
-        $imagine = new Imagine();
-        if (@is_file($photo)) {
-            $image = $imagine->open($photo);
-        } else {
-            $image = $imagine->load($photo);
-        }
-
-        // Fix transparent png
-        $palette = new RGB();
-        $white   = $palette->color('FFF');
-
-        $image = $imagine
-            ->create(new Box($image->getSize()->getWidth(), $image->getSize()->getHeight()), $white)
-            ->paste($image, new Point(0, 0));
-
-        return $this->addContent(self::TYPE_PHOTO, $image->get('jpg'));
-    }
-
-    /**
      * Add print time
      *
-     * @param string $prefix
-     * @param string $format
+     * @param null|string $prefix
+     * @param null|string $format
      * @param array $options
      * @return $this
      */
-    public function addPrintedTime($prefix = 'Printed at: ', $format = 'Y-m-d H:i:s', $options =[])
+    public function addPrintedTime($prefix = null, $format = null, $options =[])
     {
+        if (empty($prefix)) {
+            $prefix = 'Printed at: ';
+        }
+
+        if (empty($format)) {
+            $format = 'Y-m-d H:i:s';
+        }
+        
         $this->addTextImage(sprintf('%s%s', $prefix, date($format)), array_merge([
             'size' => '12',
         ], $options));
-        return $this;
-    }
-
-    /**
-     * Add content
-     *
-     * @param string $type
-     * @param string $content
-     * @return $this
-     * @throws Exception\InvalidArgumentException
-     */
-    public function addContent($type, $content)
-    {
-        if (! in_array($type, $this->allowed_content_types)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                "%s: Invalid type '%s'",
-                __METHOD__,
-                $type
-            ));
-        }
-
-        $content = $this->encode($type, $content);
-
-        $this->contents[] = $content;
 
         return $this;
     }
 
-    /**
-     * Remove all contents
-     *
-     * @return $this
-     */
-    public function removeAll()
-    {
-        $this->contents = [];
-
-        return $this;
-    }
-
-    /**
-     * Get contents
-     *
-     * @return array
-     */
-    public function getContents()
-    {
-        return $this->contents;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPrintContent()
-    {
-        return implode(self::CONTENT_DELIMITER, $this->getContents());
-    }
 }

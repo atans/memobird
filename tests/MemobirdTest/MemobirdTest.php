@@ -149,8 +149,8 @@ class MemobirdTest extends \PHPUnit_Framework_TestCase
     public function testAddTextAndPhoto()
     {
         $printContent = new PrintContent();
-        $printContent->addText('Hello World, 你好世界')
-            ->addTextImage('Hello World, 你好世界')
+        $printContent->addTextImage('Hello World, 你好世界')
+            ->addText('Hello World, 你好世界')
             ->addTextImage('繁體中文')
             ->addPhoto(__DIR__ . '/images/logo.png');
 
