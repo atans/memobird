@@ -109,7 +109,7 @@ $printContent->addQrCode('http://memobird.cn', [
 
 // Add printed time
 // 加列印时间
-$printContent->addPrint('http://memobird.cn');
+$printContent->addPrintedTime();
 
     
 // Remove all content
