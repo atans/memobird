@@ -39,9 +39,9 @@ $ composer require atans/memobird
 
 ```php
 <?php
-require 'vendor/autolod.php';
+require 'vendor/autoload.php';
 
-use Atans\Content\PrintContent;
+use Atans\Memobird\Content\PrintContent;
 use Atans\Memobird\Memobird;
 
 $memobird = new Memobird('API KEY');
